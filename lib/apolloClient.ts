@@ -1,30 +1,27 @@
-import {
-    ApolloClient,
-    HttpLink,
-    InMemoryCache,
-    NormalizedCacheObject,
-} from '@apollo/client'
-// import 'cross-fetch/polyfill'
+// apollo-client.ts
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | undefined
-const createApolloClient = () => {
-    return new ApolloClient({
-        ssrMode: typeof window === 'undefined',
-        link: new HttpLink({
-            uri: process.env.GRAPHQL_URL,
-            headers: {
-                'x-hasura-admin-secret': process.env.GRAPHQL_SECRET as string,
-            },
-        }),
-        cache: new InMemoryCache(),
-    })
-}
-export const initializeApollo = (initialState = null) => {
-    const _apolloClient = apolloClient ?? createApolloClient()
-    // For SSG and SSR always create a new Apollo Client
-    if (typeof window === 'undefined') return _apolloClient
-    // Create the Apollo Client once in the client
-    if (!apolloClient) apolloClient = _apolloClient
+const httpLink = createHttpLink({
+  uri: process.env.GRAPHQL_URL as string,
+});
 
-    return _apolloClient
-}
+const authLink = setContext((_, { headers }) => {
+  const customHeaders = {
+    'x-hasura-admin-secret': process.env.GRAPHQL_SECRET as string,
+  };
+
+  return {
+    headers: {
+      ...headers,
+      ...customHeaders,
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
+export default client;

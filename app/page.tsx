@@ -1,33 +1,30 @@
-import { gql} from "@apollo/client";
-import { initializeApollo } from "@/lib/apolloClient";
-import { GetTodosDocument, GetTodosQuery, GetTodosQueryVariables } from "@/types/generated";
+import AddTodo from "@/components/AddTodo";
+import TodoList from "@/components/TodoList";
 
 export default async function Home() {
-  const result = await getData();
-  // console.log(result.data);
-  // getData();
+  // const result = await getData();
+
   return (
-    <div className="w-full bg-indigo-500">
-      <p>Welcome to my Todo App</p>
-      <p>Here is the list of your tasks:</p>
-      <ul>
-        {result.todo.map((todo: any) => (
-          <li key={todo.id}>{todo.name}</li>
-        ))}
-      </ul>
+    <div className="flex flex-col items-center h-screen w-full">
+      <AddTodo />
+      <TodoList />
     </div>
   );
 }
 
+
 async function getData() {
-  const client = initializeApollo();
-  const { data, error } = await client.query<GetTodosQuery, GetTodosQueryVariables>({
-    query: GetTodosDocument
-  })
-  if(error){
-    console.log(error);
-    // throw new Error(error.message);
-  }
-  console.log(data);
-  return data;
+  // const { data, error } = await client.query<GetTodosQuery, GetTodosQueryVariables>({
+  //   query: GetTodosDocument
+  // })
+  // if(error){
+  //   console.log(error);
+  //   // throw new Error(error.message);
+  // }
+  // console.log(data);
+  // return data;
+  // const { data } = useQuery<TodoQuery>('todos', async () => {
+  //   const { todos } = await request(process.env.GRAPHQL_URL as string, TodosQueryDocument)
+  //   return todos
+  // })
 }
