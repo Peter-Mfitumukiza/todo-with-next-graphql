@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen -r dotenv/config --config codegen.yaml  dotenv_config_path=./.env"
   },
   "dependencies": {
     "@apollo/client": "^3.8.3",
+    "@graphql-codegen/typescript-graphql-request": "^5.0.0",
     "@radix-ui/themes": "^1.1.2",
     "@types/node": "20.5.9",
     "@types/react": "18.2.21",
@@ -19,6 +20,8 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "graphql": "^16.8.0",
+    "graphql-request": "^6.1.0",
+    "graphql-tag": "^2.12.6",
     "next": "13.4.19",
     "postcss": "8.4.29",
     "react": "18.2.0",
@@ -28,7 +31,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/introspection": "4.0.0",
-    "@graphql-codegen/client-preset": "4.1.0"
+    "@graphql-codegen/client-preset": "4.1.0",
+    "@graphql-codegen/introspection": "4.0.0"
   }
 }

@@ -1,0 +1,6 @@
+query TodoQuery {
+  todo{
+    id
+    name
+  }
+}
