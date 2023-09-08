@@ -1,42 +1,40 @@
+import { gql} from "@apollo/client";
+// import { GET_TODOS } from "../queries/queries";
+import { initializeApollo } from "@/lib/apolloClient";
 
 export default async function Home() {
-
   const result = await getData();
-  console.log(result.data);
+  // console.log(result.data);
+  // getData();
   return (
-    <div>
+    <div className="w-full bg-indigo-500">
       <p>Welcome to my Todo App</p>
       <p>Here is the list of your tasks:</p>
       <ul>
-        {result.data.todo.map((todo: any) => (
-          <li key={todo.id}>
-            {todo.name}
-          </li>
+        {result.todo.map((todo: any) => (
+          <li key={todo.id}>{todo.name}</li>
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 async function getData() {
-  const res = await fetch(process.env.GRAPHQL_URL as string, {
-    method: "POST",
-    headers:{
-      'x-hasura-admin-secret': process.env.GRAPHQL_SECRET as string
-    },
-    body: JSON.stringify({
-      query: `query{
+  const client = initializeApollo();
+  const { data, error } = await client.query({
+    query: gql`
+      query GET_TODOS {
         todo {
-          name
           id
-          created_at
+          name
         }
       }
-      `
-    })
-  });
-  if(!res.ok){
-    throw new Error('Failed to fetch data');
+    `
+  })
+  if(error){
+    console.log(error);
+    // throw new Error(error.message);
   }
-  return res.json();
+  console.log(data);
+  return data;
 }
