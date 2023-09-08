@@ -1,4 +1,4 @@
-query TodoQuery {
+query GetTodos {
   todo{
     id
     name

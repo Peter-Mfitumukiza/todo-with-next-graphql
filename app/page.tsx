@@ -1,6 +1,6 @@
 import { gql} from "@apollo/client";
-// import { GET_TODOS } from "../queries/queries";
 import { initializeApollo } from "@/lib/apolloClient";
+import { GetTodosDocument, GetTodosQuery, GetTodosQueryVariables } from "@/types/generated";
 
 export default async function Home() {
   const result = await getData();
@@ -21,15 +21,8 @@ export default async function Home() {
 
 async function getData() {
   const client = initializeApollo();
-  const { data, error } = await client.query({
-    query: gql`
-      query GET_TODOS {
-        todo {
-          id
-          name
-        }
-      }
-    `
+  const { data, error } = await client.query<GetTodosQuery, GetTodosQueryVariables>({
+    query: GetTodosDocument
   })
   if(error){
     console.log(error);

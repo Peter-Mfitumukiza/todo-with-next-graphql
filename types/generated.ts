@@ -388,14 +388,14 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
-export type TodoQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TodoQueryQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null }> };
+export type GetTodosQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null }> };
 
 
-export const TodoQueryDocument = gql`
-    query TodoQuery {
+export const GetTodosDocument = gql`
+    query GetTodos {
   todo {
     id
     name
@@ -410,8 +410,8 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    TodoQuery(variables?: TodoQueryQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<TodoQueryQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<TodoQueryQuery>(TodoQueryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'TodoQuery', 'query');
+    GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
     }
   };
 }
