@@ -19,6 +19,19 @@ export type Scalars = {
   uuid: { input: any; output: any; }
 };
 
+/** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
+export type Boolean_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['Boolean']['input']>;
+  _gt?: InputMaybe<Scalars['Boolean']['input']>;
+  _gte?: InputMaybe<Scalars['Boolean']['input']>;
+  _in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['Boolean']['input']>;
+  _lte?: InputMaybe<Scalars['Boolean']['input']>;
+  _neq?: InputMaybe<Scalars['Boolean']['input']>;
+  _nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['String']['input']>;
@@ -232,6 +245,7 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "todo" */
 export type Todo = {
   __typename?: 'todo';
+  complete?: Maybe<Scalars['Boolean']['output']>;
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['uuid']['output'];
   name?: Maybe<Scalars['String']['output']>;
@@ -264,6 +278,7 @@ export type Todo_Bool_Exp = {
   _and?: InputMaybe<Array<Todo_Bool_Exp>>;
   _not?: InputMaybe<Todo_Bool_Exp>;
   _or?: InputMaybe<Array<Todo_Bool_Exp>>;
+  complete?: InputMaybe<Boolean_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
@@ -277,6 +292,7 @@ export enum Todo_Constraint {
 
 /** input type for inserting data into table "todo" */
 export type Todo_Insert_Input = {
+  complete?: InputMaybe<Scalars['Boolean']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -316,6 +332,7 @@ export type Todo_On_Conflict = {
 
 /** Ordering options when selecting data from "todo". */
 export type Todo_Order_By = {
+  complete?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
@@ -329,6 +346,8 @@ export type Todo_Pk_Columns_Input = {
 /** select columns of table "todo" */
 export enum Todo_Select_Column {
   /** column name */
+  Complete = 'complete',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
@@ -338,6 +357,7 @@ export enum Todo_Select_Column {
 
 /** input type for updating data in table "todo" */
 export type Todo_Set_Input = {
+  complete?: InputMaybe<Scalars['Boolean']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -353,6 +373,7 @@ export type Todo_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Todo_Stream_Cursor_Value_Input = {
+  complete?: InputMaybe<Scalars['Boolean']['input']>;
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -360,6 +381,8 @@ export type Todo_Stream_Cursor_Value_Input = {
 
 /** update columns of table "todo" */
 export enum Todo_Update_Column {
+  /** column name */
+  Complete = 'complete',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -391,7 +414,14 @@ export type Uuid_Comparison_Exp = {
 export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTodosQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null }> };
+export type GetTodosQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null, complete?: boolean | null }> };
+
+export type CreateTodoMutationVariables = Exact<{
+  name?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type CreateTodoMutation = { __typename?: 'mutation_root', insert_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', id: any, name?: string | null, complete?: boolean | null }> } | null };
 
 
 export const GetTodosDocument = gql`
@@ -399,6 +429,18 @@ export const GetTodosDocument = gql`
   todo {
     id
     name
+    complete
+  }
+}
+    `;
+export const CreateTodoDocument = gql`
+    mutation CreateTodo($name: String) {
+  insert_todo(objects: {name: $name}) {
+    returning {
+      id
+      name
+      complete
+    }
   }
 }
     `;
@@ -412,6 +454,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
+    },
+    CreateTodo(variables?: CreateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateTodoMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateTodoMutation>(CreateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateTodo', 'mutation');
     }
   };
 }

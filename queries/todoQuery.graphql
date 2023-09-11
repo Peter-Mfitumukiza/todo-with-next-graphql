@@ -1,6 +1,17 @@
 query GetTodos {
-  todo{
+  todo {
     id
     name
+    complete
+  }
+}
+
+mutation CreateTodo($name: String) {
+  insert_todo(objects: { name: $name }) {
+    returning {
+      id
+      name
+      complete
+    }
   }
 }
