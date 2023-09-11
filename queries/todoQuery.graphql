@@ -6,6 +6,15 @@ query GetTodos {
   }
 }
 
+query GetTodoById($id: uuid!) {
+  todo_by_pk(id: $id) {
+    complete
+    created_at
+    id
+    name
+  }
+}
+
 mutation CreateTodo($name: String) {
   insert_todo(objects: { name: $name }) {
     returning {
@@ -15,3 +24,31 @@ mutation CreateTodo($name: String) {
     }
   }
 }
+
+mutation UpdateTodo($id: uuid, $complete: Boolean) {
+  update_todo(where: { id: { _eq: $id } }, _set: { complete: $complete }) {
+    returning {
+      complete
+      created_at
+      id
+      name
+    }
+  }
+}
+
+# mutation DeleteTodo($id: uuid) {
+#   delete_todo(where: {id: {_eq: $id}}) {
+#     returning {
+#       created_at
+#       complete
+#       id
+#       name
+#     }
+#   }
+# }
+
+# mutation DeleteAllCompleted() {
+#   delete_todo(where: {complete: {_eq: true}}){
+
+#   }
+# }

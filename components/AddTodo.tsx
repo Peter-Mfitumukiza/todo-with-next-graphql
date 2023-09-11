@@ -1,4 +1,5 @@
 "use client";
+
 import { Button, Flex, TextField } from "@radix-ui/themes";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -6,7 +7,7 @@ import React, { useState } from "react";
 export default function AddTodo() {
   const [task, setTask] = useState<string>("");
 
-  const { mutate } = useMutation(createTodo);
+  const { mutate }= useMutation(createTodo);
 
   // handle text field input changes
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
