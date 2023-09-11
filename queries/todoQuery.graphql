@@ -2,5 +2,14 @@ query GetTodos {
   todo{
     id
     name
+    completed
+  }
+}
+
+mutation CreateTodo($name: String!) {
+  createTodo(input: { name: $name }) {
+    id
+    name
+    completed
   }
 }
