@@ -1,8 +1,11 @@
+"use client"
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import '../styles/globals.css'
-import '@radix-ui/themes/styles.css';
-import { Theme } from '@radix-ui/themes'
+import "../styles/globals.css";
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,16 +19,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
+  const [queryClient] = React.useState(() => new QueryClient());
   return (
-      <html lang="en">
-        <body className={inter.className}>
-          {/* <ApolloProvider client={client}> */}
-          <Theme appearance="dark">
+    <html lang="en">
+      <body className={inter.className}>
+        <Theme appearance="dark">
+          <QueryClientProvider client={queryClient}>
             {children}
-          </Theme>
-          {/* </ApolloProvider> */}
-        </body>
-      </html>
+          </QueryClientProvider>
+        </Theme>
+      </body>
+    </html>
   );
 }
