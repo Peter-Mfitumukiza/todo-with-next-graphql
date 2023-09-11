@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import { Flex, Text, Checkbox, Select, Button } from "@radix-ui/themes";
 import { FaTrash } from "react-icons/fa";
-// import { useTodos } from "../hooks/useTodo"; 
+import { useTodos } from "../hooks/useTodo";
 
 export default function TodoList() {
-  // const { data, error, isLoading } = useTodos();
+  const { data, error, isLoading } = useTodos();
 
   return (
     <div className="w-100">
@@ -15,7 +15,7 @@ export default function TodoList() {
         style={{ maxWidth: 300 }}
         className="mb-8"
       >
-        {/* {isLoading ? (
+        {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>Something went wrong</p>
@@ -25,7 +25,7 @@ export default function TodoList() {
             <Text asChild size="3" key={task.id}>
               <Flex align="center" gap="3">
                 <Checkbox id={`checkbox-${task.id}`} />
-                <label htmlFor={`checkbox-${task.id}`}>{task.title}</label>
+                <label htmlFor={`checkbox-${task.id}`}>{task.name}</label>
                 <button
                   aria-label="Delete"
                   style={{ border: "none", background: "transparent" }}
@@ -35,7 +35,7 @@ export default function TodoList() {
               </Flex>
             </Text>
           ))
-        )} */}
+        )}
       </Flex>
       <Flex gap="8">
         <Select.Root defaultValue="all">
