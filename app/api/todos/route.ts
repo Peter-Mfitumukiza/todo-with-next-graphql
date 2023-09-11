@@ -1,4 +1,5 @@
-import { getTodos } from "../service/todoService";
+import { Todo } from "@/types/generated";
+import { getTodos, recordNewTodo } from "../service/todoService";
 
 export const GET = async (req: Request) => {
     try {
@@ -8,3 +9,14 @@ export const GET = async (req: Request) => {
         return new Response(JSON.stringify(error), { status: 500});
     }
 }
+
+export const POST = async (req: Request) => {
+    try {
+        const  body: any = await req.json();
+        const result = await recordNewTodo({name: body.name});
+        return new Response(JSON.stringify(result), { status: 200 });
+    } catch (error) {
+        return new Response(JSON.stringify(error), { status:500});
+    }
+}
+
