@@ -1,5 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
+// import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -445,6 +445,13 @@ export type DeleteTodoMutationVariables = Exact<{
 
 export type DeleteTodoMutation = { __typename?: 'mutation_root', delete_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', created_at: any, complete?: boolean | null, id: any, name?: string | null }> } | null };
 
+export type DeleteAllCompletedMutationVariables = Exact<{
+  deleteThem?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type DeleteAllCompletedMutation = { __typename?: 'mutation_root', delete_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', complete?: boolean | null, created_at: any, name?: string | null, id: any }> } | null };
+
 
 export const GetTodosDocument = gql`
     query GetTodos {
@@ -500,29 +507,44 @@ export const DeleteTodoDocument = gql`
   }
 }
     `;
+export const DeleteAllCompletedDocument = gql`
+    mutation DeleteAllCompleted($deleteThem: Boolean) {
+  delete_todo(where: {complete: {_eq: $deleteThem}}) {
+    returning {
+      complete
+      created_at
+      name
+      id
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
 
-export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
-  return {
-    GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
-    },
-    GetTodoById(variables: GetTodoByIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodoByIdQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTodoByIdQuery>(GetTodoByIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodoById', 'query');
-    },
-    CreateTodo(variables?: CreateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateTodoMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateTodoMutation>(CreateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateTodo', 'mutation');
-    },
-    UpdateTodo(variables?: UpdateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateTodoMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTodoMutation>(UpdateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateTodo', 'mutation');
-    },
-    DeleteTodo(variables?: DeleteTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteTodoMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<DeleteTodoMutation>(DeleteTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteTodo', 'mutation');
-    }
-  };
-}
-export type Sdk = ReturnType<typeof getSdk>;
+// export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+//   return {
+//     GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
+//     },
+//     GetTodoById(variables: GetTodoByIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodoByIdQuery> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<GetTodoByIdQuery>(GetTodoByIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodoById', 'query');
+//     },
+//     CreateTodo(variables?: CreateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateTodoMutation> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<CreateTodoMutation>(CreateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateTodo', 'mutation');
+//     },
+//     UpdateTodo(variables?: UpdateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateTodoMutation> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<UpdateTodoMutation>(UpdateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateTodo', 'mutation');
+//     },
+//     DeleteTodo(variables?: DeleteTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteTodoMutation> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<DeleteTodoMutation>(DeleteTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteTodo', 'mutation');
+//     },
+//     DeleteAllCompleted(variables?: DeleteAllCompletedMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteAllCompletedMutation> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<DeleteAllCompletedMutation>(DeleteAllCompletedDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteAllCompleted', 'mutation');
+//     }
+//   };
+// }
+// export type Sdk = ReturnType<typeof getSdk>;
