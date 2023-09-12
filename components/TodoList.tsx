@@ -5,14 +5,21 @@ import { FaTrash } from "react-icons/fa";
 import { useTodos } from "../hooks/useTodo";
 import { Todo } from "@/types/generated";
 import { useUpdateTodo } from "@/hooks/useUpdateTodo";
+import { useDeleteTodo } from "@/hooks/useDeleteTodo";
 
 export default function TodoList() {
   const { data, error, isLoading } = useTodos();
 
   const { updateTodo } = useUpdateTodo();
+  const { deleteTodo } = useDeleteTodo();
 
   const handleCheckboxChange = async (task: Todo) => {
     updateTodo(task);
+  };
+
+  const handleDeleteClick = async (task: Todo) => {
+    console.log("delete clicked");
+    deleteTodo(task.id);
   };
 
   return (
@@ -41,6 +48,7 @@ export default function TodoList() {
                 <button
                   aria-label="Delete"
                   style={{ border: "none", background: "transparent" }}
+                  onClick={() => handleDeleteClick(task)} 
                 >
                   <FaTrash color="red" size={14} />
                 </button>

@@ -438,6 +438,13 @@ export type UpdateTodoMutationVariables = Exact<{
 
 export type UpdateTodoMutation = { __typename?: 'mutation_root', update_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', complete?: boolean | null, created_at: any, id: any, name?: string | null }> } | null };
 
+export type DeleteTodoMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['uuid']['input']>;
+}>;
+
+
+export type DeleteTodoMutation = { __typename?: 'mutation_root', delete_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', created_at: any, complete?: boolean | null, id: any, name?: string | null }> } | null };
+
 
 export const GetTodosDocument = gql`
     query GetTodos {
@@ -481,6 +488,18 @@ export const UpdateTodoDocument = gql`
   }
 }
     `;
+export const DeleteTodoDocument = gql`
+    mutation DeleteTodo($id: uuid) {
+  delete_todo(where: {id: {_eq: $id}}) {
+    returning {
+      created_at
+      complete
+      id
+      name
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -500,6 +519,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     UpdateTodo(variables?: UpdateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateTodoMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateTodoMutation>(UpdateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateTodo', 'mutation');
+    },
+    DeleteTodo(variables?: DeleteTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteTodoMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteTodoMutation>(DeleteTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteTodo', 'mutation');
     }
   };
 }
