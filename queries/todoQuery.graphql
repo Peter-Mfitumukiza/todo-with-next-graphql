@@ -1,5 +1,5 @@
 query GetTodos {
-  todo {
+  todo (order_by: {created_at: asc}) {
     id
     name
     complete

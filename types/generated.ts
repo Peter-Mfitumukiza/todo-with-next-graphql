@@ -441,7 +441,7 @@ export type UpdateTodoMutation = { __typename?: 'mutation_root', update_todo?: {
 
 export const GetTodosDocument = gql`
     query GetTodos {
-  todo {
+  todo(order_by: {created_at: asc}) {
     id
     name
     complete

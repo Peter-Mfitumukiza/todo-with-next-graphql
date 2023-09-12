@@ -1,4 +1,4 @@
-import { getTodos, getTodoById, recordNewTodo, updateTodo } from "../service/todoService";
+import { getTodos, recordNewTodo} from "../service/todoService";
 
 export const GET = async (req: Request) => {
   try {
@@ -18,42 +18,3 @@ export const POST = async (req: Request) => {
     return new Response(JSON.stringify(error), { status: 500 });
   }
 };
-
-export const PUT = async (req: Request) => {
-  try {
-    // Extract the todoId from the URL path
-    const parts = req.url.split("/");
-    const todoId = parts[parts.length - 1];
-
-    const body: any = await req.json();
-
-    const existingTodo = await getTodoById(todoId);
-
-    if (!existingTodo) {
-      return new Response(JSON.stringify({ error: "Todo not found" }), {
-        status: 404,
-      });
-    }
-
-    // Update the existing todo item with the new data
-    const updatedTodo = {
-      ...existingTodo,
-      ...body,
-    };
-    await updateTodo(updatedTodo);
-    return new Response(JSON.stringify(updatedTodo), { status: 200 });
-  } catch (error) {
-
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-      status: 500,
-    });
-  }
-};
-
-export const DELETE = async () => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}

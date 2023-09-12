@@ -26,7 +26,11 @@ export async function getTodoById(id: string) {
   return result.todo_by_pk;
 }
 
-export async function recordNewTodo(newTodo: any) {
+export async function recordNewTodo(newTodo: {
+  id?: string;
+  name: string;
+  complete?: boolean;
+}) {
   const result: CreateTodoMutation = await gqlClient.request(
     CreateTodoDocument,
     newTodo
@@ -39,12 +43,15 @@ export async function updateTodo(taskData: {
   name?: string;
   complete?: boolean;
 }) {
-  const result: UpdateTodoMutation = await gqlClient.request(
-    UpdateTodoDocument,
-    taskData
-  );
-  console.log(result);
-  return result;
+  try {
+    const result: UpdateTodoMutation = await gqlClient.request(
+      UpdateTodoDocument,
+      {id: taskData.id, complete: taskData.complete}
+    );
+    return result;
+  } catch (error) {
+      console.log("Something went wrong", error);
+  }
 }
 
 export async function deleteTask() {}
