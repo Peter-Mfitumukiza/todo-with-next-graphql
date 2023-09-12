@@ -9,6 +9,8 @@ import {
   UpdateTodoMutation,
   DeleteTodoDocument,
   DeleteTodoMutation,
+  DeleteAllCompletedMutation,
+  DeleteAllCompletedDocument,
 } from "@/types/generated";
 import { CreateTodoDocument, CreateTodoMutation } from "@/types/generated";
 
@@ -65,5 +67,18 @@ export async function deleteTodo(id: string) {
     return result;
   } catch (error) {
     throw new Error("Couldn't delete todo");
+  }
+}
+
+export async function deleteAllCompletedTodos(){
+  try {
+    const result: DeleteAllCompletedMutation = await gqlClient.request(
+      DeleteAllCompletedDocument,
+      {deleteThem: true}
+    )
+    // console.log(result);
+    return result
+  } catch (error) {
+    throw new Error("Couldn't delete all completed todos")
   }
 }

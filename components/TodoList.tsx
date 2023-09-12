@@ -6,21 +6,26 @@ import { useTodos } from "../hooks/useTodo";
 import { Todo } from "@/types/generated";
 import { useUpdateTodo } from "@/hooks/useUpdateTodo";
 import { useDeleteTodo } from "@/hooks/useDeleteTodo";
+import { useDeleteAllCompleted } from "@/hooks/useDeleteAllCompleted";
 
 export default function TodoList() {
   const { data, error, isLoading } = useTodos();
 
   const { updateTodo } = useUpdateTodo();
   const { deleteTodo } = useDeleteTodo();
+  const { deleteAllCompleted } = useDeleteAllCompleted();
 
   const handleCheckboxChange = async (task: Todo) => {
     updateTodo(task);
   };
 
   const handleDeleteClick = async (task: Todo) => {
-    console.log("delete clicked");
     deleteTodo(task.id);
   };
+
+  const handleDeleteAllCompleted = async () => {
+    deleteAllCompleted();
+  }
 
   return (
     <div className="w-100">
@@ -66,7 +71,11 @@ export default function TodoList() {
             <Select.Item value="completed">Completed</Select.Item>
           </Select.Content>
         </Select.Root>
-        <Button color="crimson" variant="soft">
+        <Button 
+          color="crimson" 
+          variant="soft"
+          onClick={() => handleDeleteAllCompleted()} 
+          >
           Delete Completed
         </Button>
       </Flex>

@@ -445,6 +445,13 @@ export type DeleteTodoMutationVariables = Exact<{
 
 export type DeleteTodoMutation = { __typename?: 'mutation_root', delete_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', created_at: any, complete?: boolean | null, id: any, name?: string | null }> } | null };
 
+export type DeleteAllCompletedMutationVariables = Exact<{
+  deleteThem?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type DeleteAllCompletedMutation = { __typename?: 'mutation_root', delete_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', complete?: boolean | null, created_at: any, name?: string | null, id: any }> } | null };
+
 
 export const GetTodosDocument = gql`
     query GetTodos {
@@ -500,6 +507,18 @@ export const DeleteTodoDocument = gql`
   }
 }
     `;
+export const DeleteAllCompletedDocument = gql`
+    mutation DeleteAllCompleted($deleteThem: Boolean) {
+  delete_todo(where: {complete: {_eq: $deleteThem}}) {
+    returning {
+      complete
+      created_at
+      name
+      id
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -522,6 +541,9 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 //     },
 //     DeleteTodo(variables?: DeleteTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteTodoMutation> {
 //       return withWrapper((wrappedRequestHeaders) => client.request<DeleteTodoMutation>(DeleteTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteTodo', 'mutation');
+//     },
+//     DeleteAllCompleted(variables?: DeleteAllCompletedMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeleteAllCompletedMutation> {
+//       return withWrapper((wrappedRequestHeaders) => client.request<DeleteAllCompletedMutation>(DeleteAllCompletedDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteAllCompleted', 'mutation');
 //     }
 //   };
 // }
