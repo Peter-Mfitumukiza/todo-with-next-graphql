@@ -1,4 +1,4 @@
-import  { updateTodo, getTodoById } from "../../service/todoService"
+import { updateTodo, getTodoById, deleteTodo } from "../../service/todoService";
 
 export const PUT = async (req: Request, { params }: any) => {
   try {
@@ -27,7 +27,20 @@ export const PUT = async (req: Request, { params }: any) => {
   }
 };
 
-export const DELETE = async () => {
+export const DELETE = async (req: Request, { params }: any) => {
   try {
-  } catch (error) {}
+    const todoId = params.id;
+    const existingTodo = await getTodoById(todoId);
+    if (!existingTodo) {
+      return new Response(JSON.stringify({ error: "Todo does not exist" }), {
+        status: 404,
+      });
+    }
+    await deleteTodo(todoId); 
+    return new Response(JSON.stringify({success: true}), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+        status: 500,
+      });
+  }
 };

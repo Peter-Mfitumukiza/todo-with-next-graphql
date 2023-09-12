@@ -2,12 +2,14 @@ overwrite: true
 schema:
   - "${GRAPHQL_URL}":
       headers:
-        x-hasura-admin-secret: "${GRAPHQL_ADMIN_KEY}"
+        x-hasura-admin-secret: "${GRAPHQL_SECRET}"
 documents: "queries/**/*.graphql"
 generates:
-  types/generated:
-    preset: "client"
+  ./types/generated.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-graphql-request"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

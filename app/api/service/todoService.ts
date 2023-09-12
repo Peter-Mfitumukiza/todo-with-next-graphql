@@ -7,6 +7,8 @@ import {
   Todo,
   UpdateTodoDocument,
   UpdateTodoMutation,
+  DeleteTodoDocument,
+  DeleteTodoMutation,
 } from "@/types/generated";
 import { CreateTodoDocument, CreateTodoMutation } from "@/types/generated";
 
@@ -46,12 +48,22 @@ export async function updateTodo(taskData: {
   try {
     const result: UpdateTodoMutation = await gqlClient.request(
       UpdateTodoDocument,
-      {id: taskData.id, complete: taskData.complete}
+      { id: taskData.id, complete: taskData.complete }
     );
     return result;
   } catch (error) {
-      console.log("Something went wrong", error);
+    console.log("Something went wrong", error);
   }
 }
 
-export async function deleteTask() {}
+export async function deleteTodo(id: string) {
+  try {
+    const result: DeleteTodoMutation = await gqlClient.request(
+      DeleteTodoDocument,
+      { id }
+    );
+    return result;
+  } catch (error) {
+    throw new Error("Couldn't delete todo");
+  }
+}

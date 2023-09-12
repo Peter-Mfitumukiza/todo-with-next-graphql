@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "codegen:init": "graphql-codegen init",
-    "codegen": "graphql-codegen -r dotenv/config --config codegen.yaml dotenv_config_path=./env "
+    "codegen": "graphql-codegen -r dotenv/config --config codegen.yaml  dotenv_config_path=./.env"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.0",

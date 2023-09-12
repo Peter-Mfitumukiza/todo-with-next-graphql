@@ -36,16 +36,16 @@ mutation UpdateTodo($id: uuid, $complete: Boolean) {
   }
 }
 
-# mutation DeleteTodo($id: uuid) {
-#   delete_todo(where: {id: {_eq: $id}}) {
-#     returning {
-#       created_at
-#       complete
-#       id
-#       name
-#     }
-#   }
-# }
+mutation DeleteTodo($id: uuid) {
+  delete_todo(where: {id: {_eq: $id}}) {
+    returning {
+      created_at
+      complete
+      id
+      name
+    }
+  }
+}
 
 # mutation DeleteAllCompleted() {
 #   delete_todo(where: {complete: {_eq: true}}){
