@@ -416,6 +416,13 @@ export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTodosQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null, complete?: boolean | null }> };
 
+export type GetTodoByIdQueryVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type GetTodoByIdQuery = { __typename?: 'query_root', todo_by_pk?: { __typename?: 'todo', complete?: boolean | null, created_at: any, id: any, name?: string | null } | null };
+
 export type CreateTodoMutationVariables = Exact<{
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -423,13 +430,31 @@ export type CreateTodoMutationVariables = Exact<{
 
 export type CreateTodoMutation = { __typename?: 'mutation_root', insert_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', id: any, name?: string | null, complete?: boolean | null }> } | null };
 
+export type UpdateTodoMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['uuid']['input']>;
+  complete?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type UpdateTodoMutation = { __typename?: 'mutation_root', update_todo?: { __typename?: 'todo_mutation_response', returning: Array<{ __typename?: 'todo', complete?: boolean | null, created_at: any, id: any, name?: string | null }> } | null };
+
 
 export const GetTodosDocument = gql`
     query GetTodos {
-  todo {
+  todo(order_by: {created_at: asc}) {
     id
     name
     complete
+  }
+}
+    `;
+export const GetTodoByIdDocument = gql`
+    query GetTodoById($id: uuid!) {
+  todo_by_pk(id: $id) {
+    complete
+    created_at
+    id
+    name
   }
 }
     `;
@@ -440,6 +465,18 @@ export const CreateTodoDocument = gql`
       id
       name
       complete
+    }
+  }
+}
+    `;
+export const UpdateTodoDocument = gql`
+    mutation UpdateTodo($id: uuid, $complete: Boolean) {
+  update_todo(where: {id: {_eq: $id}}, _set: {complete: $complete}) {
+    returning {
+      complete
+      created_at
+      id
+      name
     }
   }
 }
@@ -455,8 +492,14 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
     },
+    GetTodoById(variables: GetTodoByIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodoByIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTodoByIdQuery>(GetTodoByIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodoById', 'query');
+    },
     CreateTodo(variables?: CreateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateTodoMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateTodoMutation>(CreateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateTodo', 'mutation');
+    },
+    UpdateTodo(variables?: UpdateTodoMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateTodoMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTodoMutation>(UpdateTodoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateTodo', 'mutation');
     }
   };
 }

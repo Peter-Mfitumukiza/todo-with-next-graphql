@@ -4,9 +4,16 @@ import { Flex, Text, Checkbox, Select, Button } from "@radix-ui/themes";
 import { FaTrash } from "react-icons/fa";
 import { useTodos } from "../hooks/useTodo";
 import { Todo } from "@/types/generated";
+import { useUpdateTodo } from "@/hooks/useUpdateTodo";
 
 export default function TodoList() {
   const { data, error, isLoading } = useTodos();
+
+  const { updateTodo } = useUpdateTodo();
+
+  const handleCheckboxChange = async (task: Todo) => {
+    updateTodo(task);
+  };
 
   return (
     <div className="w-100">
@@ -25,14 +32,18 @@ export default function TodoList() {
           data.map((task: Todo) => (
             <Text asChild size="3" key={task.id}>
               <Flex align="center" gap="3">
-                <Checkbox id={`checkbox-${task.id}`} defaultChecked={task.complete ? task.complete : false}  />
+                <Checkbox
+                  id={`checkbox-${task.id}`}
+                  defaultChecked={task.complete ? task.complete : false}
+                  onCheckedChange={() => handleCheckboxChange(task)}
+                />
                 <label htmlFor={`checkbox-${task.id}`}>{task.name}</label>
                 <button
                   aria-label="Delete"
                   style={{ border: "none", background: "transparent" }}
                 >
                   <FaTrash color="red" size={14} />
-                </button> 
+                </button>
               </Flex>
             </Text>
           ))
