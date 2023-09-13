@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest",
+    "test:e2e": "playwright test",
     "lint": "next lint",
     "codegen:init": "graphql-codegen init",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yaml  dotenv_config_path=./.env"
@@ -34,10 +36,15 @@
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-graphql-request": "^5.0.0",
     "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@playwright/test": "^1.37.1",
+    "@testing-library/react": "^14.0.0",
+    "@vitejs/plugin-react": "^4.0.4",
     "autoprefixer": "10.4.15",
+    "jsdom": "^22.1.0",
     "postcss": "8.4.29",
     "tailwindcss": "3.3.3",
     "ts-node": "^10.9.1",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "vitest": "^0.34.4"
   }
 }
