@@ -1,16 +1,25 @@
 import { useMutation } from "@tanstack/react-query";
+import { useTodos } from "./useTodo";
+
+// function to delete todo
+async function deleteTodoItem(id: string){
+  await fetch(`/api/todos/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 
 export function useDeleteTodo() {
-  const deleteTodoMutation = useMutation(async (id: number) => {
-    await fetch(`/api/todos/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  });
+  const { refetch } = useTodos();
+  // create a mutation to delete todo item
+  const deleteTodoMutation = useMutation(deleteTodoItem, {
+    onSuccess: () => refetch()
+  }); 
 
-  const deleteTodo = async (id: number) => {
+  // a function to delete a todo item using the mutation
+  const deleteTodo = async (id: string) => {
     try {
       await deleteTodoMutation.mutateAsync(id);
     } catch (error) {
@@ -18,9 +27,5 @@ export function useDeleteTodo() {
     }
   };
 
-  return {
-    deleteTodo,
-    isLoading: deleteTodoMutation.isLoading,
-    isError: deleteTodoMutation.isError,
-  };
+  return deleteTodo;
 }

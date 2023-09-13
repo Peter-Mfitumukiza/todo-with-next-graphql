@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 export const useTodos = () => {
+
   return useQuery(["todos"], async () => {
     const response = await fetch("/api/todos");
     if (!response.ok) {

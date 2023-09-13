@@ -76,7 +76,6 @@ export async function deleteAllCompletedTodos(){
       DeleteAllCompletedDocument,
       {deleteThem: true}
     )
-    // console.log(result);
     return result
   } catch (error) {
     throw new Error("Couldn't delete all completed todos")

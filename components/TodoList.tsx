@@ -1,31 +1,18 @@
 "use client";
-
 import { Flex, Text, Checkbox, Select, Button } from "@radix-ui/themes";
 import { FaTrash } from "react-icons/fa";
 import { useTodos } from "../hooks/useTodo";
-import { Todo } from "@/types/generated";
 import { useUpdateTodo } from "@/hooks/useUpdateTodo";
 import { useDeleteTodo } from "@/hooks/useDeleteTodo";
 import { useDeleteAllCompleted } from "@/hooks/useDeleteAllCompleted";
+import TODO from "@/types/Todo";
 
 export default function TodoList() {
+  // const [filter, setFilter] = useState("all");
   const { data, error, isLoading } = useTodos();
-
-  const { updateTodo } = useUpdateTodo();
-  const { deleteTodo } = useDeleteTodo();
-  const { deleteAllCompleted } = useDeleteAllCompleted();
-
-  const handleCheckboxChange = async (task: Todo) => {
-    updateTodo(task);
-  };
-
-  const handleDeleteClick = async (task: Todo) => {
-    deleteTodo(task.id);
-  };
-
-  const handleDeleteAllCompleted = async () => {
-    deleteAllCompleted();
-  }
+  const updateTodo = useUpdateTodo();
+  const deleteTodo  = useDeleteTodo();
+  const deleteAllCompleted = useDeleteAllCompleted()
 
   return (
     <div className="w-100">
@@ -41,19 +28,19 @@ export default function TodoList() {
           <p>Something went wrong</p>
         ) : (
           // Map over the tasks fetched from the API
-          data.map((task: Todo) => (
+          data.map((task: TODO) => (
             <Text asChild size="3" key={task.id}>
               <Flex align="center" gap="3">
                 <Checkbox
                   id={`checkbox-${task.id}`}
                   defaultChecked={task.complete ? task.complete : false}
-                  onCheckedChange={() => handleCheckboxChange(task)}
+                  onCheckedChange={() => updateTodo(task)}
                 />
                 <label htmlFor={`checkbox-${task.id}`}>{task.name}</label>
                 <button
                   aria-label="Delete"
                   style={{ border: "none", background: "transparent" }}
-                  onClick={() => handleDeleteClick(task)} 
+                  onClick={() => deleteTodo(task.id)}
                 >
                   <FaTrash color="red" size={14} />
                 </button>
@@ -71,11 +58,11 @@ export default function TodoList() {
             <Select.Item value="completed">Completed</Select.Item>
           </Select.Content>
         </Select.Root>
-        <Button 
-          color="crimson" 
+        <Button
+          color="crimson"
           variant="soft"
-          onClick={() => handleDeleteAllCompleted()} 
-          >
+          onClick={() => deleteAllCompleted()}
+        >
           Delete Completed
         </Button>
       </Flex>

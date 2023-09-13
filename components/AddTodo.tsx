@@ -1,36 +1,24 @@
 "use client";
 
 import { Button, Flex, TextField } from "@radix-ui/themes";
-import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { useAddTodo } from "@/hooks/useAddTodo";
 
 export default function AddTodo() {
+  const createTodo = useAddTodo();
   const [task, setTask] = useState<string>("");
-
-  const { mutate }= useMutation(createTodo);
 
   // handle text field input changes
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);
   };
 
-  // Function to handle form submission
+  // handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    mutate(task, {
-      onSuccess: () => {
-        // Handle success, if needed
-        console.log("Task added successfully!");
-        setTask("");
-
-      },
-      onError: () => {
-        // Handle error, if needed
-        console.error("Failed to add task.");
-      },
-    });
-
+    if(task === "") return;
+    setTask("");
+    createTodo(task);
   };
   // Submit form on enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,19 +49,3 @@ export default function AddTodo() {
   );
 }
 
-const createTodo = async (newTask: string) => {
-  console.log(newTask);
-  const response = await fetch("/api/todos", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name: newTask }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to create task.");
-  }
-
-  return response.json();
-};
