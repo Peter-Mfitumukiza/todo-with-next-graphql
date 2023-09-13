@@ -10,20 +10,3 @@ export default async function Home() {
     </div>
   );
 }
-
-
-async function getData() {
-  // const { data, error } = await client.query<GetTodosQuery, GetTodosQueryVariables>({
-  //   query: GetTodosDocument
-  // })
-  // if(error){
-  //   console.log(error);
-  //   // throw new Error(error.message);
-  // }
-  // console.log(data);
-  // return data;
-  // const { data } = useQuery<TodoQuery>('todos', async () => {
-  //   const { todos } = await request(process.env.GRAPHQL_URL as string, TodosQueryDocument)
-  //   return todos
-  // })
-}
