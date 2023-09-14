@@ -9,12 +9,15 @@
     "test": "vitest",
     "test:e2e": "playwright test",
     "lint": "next lint",
+    "supabase:generate": "supabase gen types typescript --project-id aanhmlmwhzvfdyqxkhnr > database.types.ts",
     "codegen:init": "graphql-codegen init",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yaml  dotenv_config_path=./.env"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^1.1.2",
+    "@supabase/auth-helpers-nextjs": "^0.7.4",
+    "@supabase/supabase-js": "^2.33.2",
     "@tanstack/react-query": "^4.35.0",
     "@types/node": "20.5.9",
     "@types/react-dom": "18.2.7",
