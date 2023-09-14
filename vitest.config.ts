@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    include: ['app/*.test.tsx'],
   },
 })
