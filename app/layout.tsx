@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
-import { Theme } from "@radix-ui/themes";
+import ThemeProvider from "@/utils/ThemeProvider";
 import CustomQueryProvider from "@/utils/CustomQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,11 +14,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme appearance="dark">
+        <ThemeProvider >
           <CustomQueryProvider>
             {children}
           </CustomQueryProvider>
-        </Theme>
+        </ThemeProvider>
       </body>
     </html>
   );
