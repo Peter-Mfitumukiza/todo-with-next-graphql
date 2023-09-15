@@ -8,23 +8,19 @@ export default function AddTodo() {
   const createTodo = useAddTodo();
   const [task, setTask] = useState<string>("");
 
-  // handle text field input changes
-  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(e.target.value);
-  };
-
   // handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(task === "") return;
+    if (task === "") return;
     setTask("");
     createTodo(task);
   };
+
   // Submit form on enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); 
-      handleSubmit(e as any); 
+      e.preventDefault();
+      handleSubmit(e as any);
     }
   };
 
@@ -37,7 +33,7 @@ export default function AddTodo() {
             style={{ width: 450 }}
             placeholder="New Task"
             value={task}
-            onChange={handleTaskChange}
+            onChange={(e) => setTask(e.target.value)}
             onKeyDown={handleKeyDown}
           />
           <Button variant="solid" style={{ width: 150 }} type="submit">
@@ -48,4 +44,3 @@ export default function AddTodo() {
     </div>
   );
 }
-
