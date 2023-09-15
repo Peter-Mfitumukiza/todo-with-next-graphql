@@ -1,5 +1,5 @@
-"use client"
-import React from "react";
+"use client";
+import { useState } from "react";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
@@ -13,11 +13,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [queryClient] = React.useState(() => new QueryClient());
+  const [isDark, setIsDark] = useState(true);
+  const [queryClient] = useState(() => new QueryClient());
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme appearance="dark">
+        <Theme appearance={isDark ? "dark" : "light"}>
           <QueryClientProvider client={queryClient}>
             {children}
           </QueryClientProvider>
