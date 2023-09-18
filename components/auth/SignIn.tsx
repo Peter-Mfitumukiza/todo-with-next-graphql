@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { TextField, Button, Flex } from "@radix-ui/themes";
+import Link from "next/link";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ export default function SignIn() {
       return;
     }
     alert("Login successful");
-    router.replace("/")
+    router.replace("/");
   };
 
   return (
@@ -62,6 +63,9 @@ export default function SignIn() {
           <Button variant="solid" style={{ width: 300 }} type="submit">
             Login
           </Button>
+          <p className="text-slate-400">
+            Don't have an account? <Link href="/register" className="font-bold">Register here</Link>
+          </p>
         </Flex>
       </form>
     </Flex>

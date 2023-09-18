@@ -63,7 +63,7 @@ export default function TodoList() {
           </Text>
         ))}
       </Flex>
-      <Flex gap="8">
+      <Flex gap="8" align="center" justify="center">
         <Select.Root value={filter} onValueChange={(value) => setFilter(value)}>
           <Select.Trigger color="indigo" variant="surface" />
           <Select.Content color="indigo">
