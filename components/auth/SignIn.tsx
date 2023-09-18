@@ -64,7 +64,7 @@ export default function SignIn() {
             Login
           </Button>
           <p className="text-slate-400">
-            Dont have an account?
+            Dont have an account?{" "}
             <Link href="/register" className="font-bold">
               Register here
             </Link>

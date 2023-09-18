@@ -6,6 +6,8 @@ import AddTodo from "@/components/AddTodo";
 import TodoList from "@/components/TodoList";
 import SignOut from "@/components/auth/SignOut";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
 
