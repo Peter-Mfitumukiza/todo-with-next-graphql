@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { TextField, Button, Flex } from "@radix-ui/themes";
+import Link from "next/link";
 
 export default function SignUp() {
   const [names, setNames] = useState("");
@@ -74,6 +75,9 @@ export default function SignUp() {
           <Button variant="solid" style={{ width: 300 }} type="submit">
             Register
           </Button>
+          <p className="text-slate-400">
+            Already have account? <Link href="/login" className="font-bold">Login here</Link>
+          </p>
         </Flex>
       </form>
     </Flex>
