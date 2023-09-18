@@ -13,15 +13,21 @@ export default function SignUp() {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
 
-  const handleSignUp = async () => {
-    await supabase.auth.signUp({
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    router.refresh();
+    if(error){
+      alert(error);
+      return;
+    }
+    alert("Registration successful, Check your email for confirmation.");
+    router.replace("/login")
   };
 
   return (
@@ -58,6 +64,7 @@ export default function SignUp() {
           <TextField.Input
             size="2"
             style={{ width: 300 }}
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => {

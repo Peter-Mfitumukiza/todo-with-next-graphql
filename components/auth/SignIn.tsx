@@ -12,12 +12,18 @@ export default function SignIn() {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
 
-  const handleSignIn = async () => {
-    await supabase.auth.signInWithPassword({
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    router.refresh();
+    if (error) {
+      alert(error);
+      return;
+    }
+    alert("Login successful");
+    router.replace("/")
   };
 
   return (
@@ -46,6 +52,7 @@ export default function SignIn() {
           <TextField.Input
             size="2"
             style={{ width: 300 }}
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => {
