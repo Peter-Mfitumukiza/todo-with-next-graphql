@@ -33,7 +33,7 @@ export default function SignIn() {
       align="center"
       justify="center"
       gap="4"
-      className="mb-8 h-screen "
+      className="mb-8 h-screen"
     >
       <form
         onSubmit={handleSignIn}
@@ -64,7 +64,10 @@ export default function SignIn() {
             Login
           </Button>
           <p className="text-slate-400">
-            Don't have an account? <Link href="/register" className="font-bold">Register here</Link>
+            Dont have an account?{" "}
+            <Link href="/register" className="font-bold">
+              Register here
+            </Link>
           </p>
         </Flex>
       </form>
