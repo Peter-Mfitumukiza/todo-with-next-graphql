@@ -13,11 +13,17 @@ migrate(db, { migrationsFolder: "drizzle" });
 
 export const appRouter = router({
   getTodos: publicProcedure.input(z.string()).query(async (opts) => {
-    return await db
+    try {
+     return await db
       .select()
       .from(todos)
       .where(eq(todos.userId, opts.input))
       .orderBy(todos.content);
+    }catch(error){
+      console.log(error);
+      throw new Error("Failed to fetch todos");
+    }
+   
   }),
   addTodo: publicProcedure
     .input(
