@@ -15,8 +15,8 @@ async function updateTodoItem(todo: TODO) {
   return response.json();
 }
 
-export function useUpdateTodo() {
-  const { refetch } = useTodos();
+export function useUpdateTodo(userId: string) {
+  const { refetch } = useTodos(userId);
 
   // Create a mutation using the useMutation hook
   const updateTodoMutation = useMutation(updateTodoItem, { 

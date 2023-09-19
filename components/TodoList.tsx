@@ -11,7 +11,7 @@ import TODO from "@/types/Todo";
 export default function TodoList({ user }: any) {
   const [filter, setFilter] = useState("all");
   const { data, error, isLoading } = useTodos(user.id);
-  const updateTodo = useUpdateTodo();
+  const updateTodo = useUpdateTodo(user.id);
   const deleteTodo = useDeleteTodo(user.id);
   const deleteAllCompleted = useDeleteAllCompleted(user.id);
 
