@@ -4,8 +4,8 @@ import { Button, Flex, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
 import { useAddTodo } from "@/hooks/useAddTodo";
 
-export default function AddTodo() {
-  const createTodo = useAddTodo();
+export default function AddTodo({ user }: any) {
+  const createTodo = useAddTodo(user.id);
   const [task, setTask] = useState<string>("");
 
   // handle form submission
@@ -13,7 +13,7 @@ export default function AddTodo() {
     e.preventDefault();
     if (task === "") return;
     setTask("");
-    createTodo(task);
+    createTodo(task, user.id);
   };
 
   // Submit form on enter
