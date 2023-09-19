@@ -2,18 +2,22 @@
 
 import { Button, Flex, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
-import { useAddTodo } from "@/hooks/useAddTodo";
+import { trpc } from "@/app/_trpc/client";
 
 export default function AddTodo({ user }: any) {
-  const createTodo = useAddTodo(user.id);
   const [task, setTask] = useState<string>("");
+  const getTodo = trpc.getTodos.useQuery(user.id);
+  const addTodo = trpc.addTodo.useMutation({
+    onSettled: () => getTodo.refetch(),
+  });
 
   // handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (task === "") return;
+    // createTodo(task, user.id);
+    addTodo.mutate({content: task, userId: user.id});
     setTask("");
-    createTodo(task, user.id);
   };
 
   // Submit form on enter
