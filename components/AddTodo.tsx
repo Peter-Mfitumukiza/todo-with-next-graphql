@@ -15,7 +15,6 @@ export default function AddTodo({ user }: any) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (task === "") return;
-    // createTodo(task, user.id);
     addTodo.mutate({content: task, userId: user.id});
     setTask("");
   };
