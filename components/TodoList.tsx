@@ -8,12 +8,12 @@ import { useDeleteTodo } from "@/hooks/useDeleteTodo";
 import { useDeleteAllCompleted } from "@/hooks/useDeleteAllCompleted";
 import TODO from "@/types/Todo";
 
-export default function TodoList() {
+export default function TodoList({ user }: any) {
   const [filter, setFilter] = useState("all");
-  const { data, error, isLoading } = useTodos();
-  const updateTodo = useUpdateTodo();
-  const deleteTodo = useDeleteTodo();
-  const deleteAllCompleted = useDeleteAllCompleted();
+  const { data, error, isLoading } = useTodos(user.id);
+  const updateTodo = useUpdateTodo(user.id);
+  const deleteTodo = useDeleteTodo(user.id);
+  const deleteAllCompleted = useDeleteAllCompleted(user.id);
 
   // Check if data is still loading or if there's an error
   if (isLoading) {
@@ -25,14 +25,22 @@ export default function TodoList() {
   }
 
   // Filter todos based on the 'filter' value
-  const filteredTodos = data.filter((task: TODO) => {
-    if (filter === "active") {
-      return !task.complete;
-    } else if (filter === "completed") {
-      return task.complete;
-    }
-    return true; // Display all todos for the "all" filter
-  });
+  let filteredTodos = [];
+  if (data.length > 0) {
+    filteredTodos = data.filter((task: TODO) => {
+      if (filter === "active") {
+        return !task.complete;
+      } else if (filter === "completed") {
+        return task.complete;
+      }
+      return true; // Display all todos for the "all" filter
+    });
+  }
+
+  // Check if there are no todos
+  if (filteredTodos.length === 0) {
+    return <p>No todos to display.</p>;
+  }
 
   return (
     <div className="w-100">
@@ -42,7 +50,6 @@ export default function TodoList() {
         style={{ maxWidth: 300 }}
         className="mb-8"
       >
-        {/* Map over the filtered todos */}
         {filteredTodos.map((task: TODO) => (
           <Text asChild size="3" key={task.id}>
             <Flex align="center" gap="3">
@@ -75,7 +82,7 @@ export default function TodoList() {
         <Button
           color="crimson"
           variant="soft"
-          onClick={() => deleteAllCompleted()}
+          onClick={() => deleteAllCompleted(user.id)}
         >
           Delete Completed
         </Button>

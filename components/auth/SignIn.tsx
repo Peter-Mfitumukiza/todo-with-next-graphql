@@ -23,6 +23,10 @@ export default function SignIn() {
       alert(error);
       return;
     }
+    // clear the inputs
+    setEmail("");
+    setPassword("");
+    
     alert("Login successful");
     router.replace("/");
   };

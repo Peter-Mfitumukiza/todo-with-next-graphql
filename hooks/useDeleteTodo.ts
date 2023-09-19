@@ -11,8 +11,8 @@ async function deleteTodoItem(id: string){
   });
 }
 
-export function useDeleteTodo() {
-  const { refetch } = useTodos();
+export function useDeleteTodo(userId: string) {
+  const { refetch } = useTodos(userId);
   // create a mutation to delete todo item
   const deleteTodoMutation = useMutation(deleteTodoItem, {
     onSuccess: () => refetch()

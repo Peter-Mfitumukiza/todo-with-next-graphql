@@ -12,17 +12,17 @@ export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
-    redirect("/login");
+  if (!user) {
+    redirect("/sign-in");
   }
 
   return (
     <div className="flex flex-col items-center h-screen">
-      <AddTodo />
-      <TodoList />
+      <AddTodo user={user} />
+      <TodoList user={user} />
       <SignOut />
     </div>
   );

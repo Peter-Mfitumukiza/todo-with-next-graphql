@@ -249,6 +249,7 @@ export type Todo = {
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['uuid']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['uuid']['output']>;
 };
 
 /** aggregated selection of "todo" */
@@ -282,6 +283,7 @@ export type Todo_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "todo" */
@@ -296,6 +298,7 @@ export type Todo_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  user_id?: InputMaybe<Scalars['uuid']['input']>;
 };
 
 /** aggregate max on columns */
@@ -304,6 +307,7 @@ export type Todo_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['uuid']['output']>;
 };
 
 /** aggregate min on columns */
@@ -312,6 +316,7 @@ export type Todo_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['uuid']['output']>;
 };
 
 /** response of any mutation on the table "todo" */
@@ -336,6 +341,7 @@ export type Todo_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: todo */
@@ -352,7 +358,9 @@ export enum Todo_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  UserId = 'user_id'
 }
 
 /** input type for updating data in table "todo" */
@@ -361,6 +369,7 @@ export type Todo_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  user_id?: InputMaybe<Scalars['uuid']['input']>;
 };
 
 /** Streaming cursor of the table "todo" */
@@ -377,6 +386,7 @@ export type Todo_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['uuid']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  user_id?: InputMaybe<Scalars['uuid']['input']>;
 };
 
 /** update columns of table "todo" */
@@ -388,7 +398,9 @@ export enum Todo_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  UserId = 'user_id'
 }
 
 export type Todo_Updates = {
@@ -411,7 +423,9 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
-export type GetTodosQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTodosQueryVariables = Exact<{
+  userId: Scalars['uuid']['input'];
+}>;
 
 
 export type GetTodosQuery = { __typename?: 'query_root', todo: Array<{ __typename?: 'todo', id: any, name?: string | null, complete?: boolean | null }> };
@@ -425,6 +439,7 @@ export type GetTodoByIdQuery = { __typename?: 'query_root', todo_by_pk?: { __typ
 
 export type CreateTodoMutationVariables = Exact<{
   name?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['uuid']['input']>;
 }>;
 
 
@@ -447,6 +462,7 @@ export type DeleteTodoMutation = { __typename?: 'mutation_root', delete_todo?: {
 
 export type DeleteAllCompletedMutationVariables = Exact<{
   deleteThem?: InputMaybe<Scalars['Boolean']['input']>;
+  userId?: InputMaybe<Scalars['uuid']['input']>;
 }>;
 
 
@@ -454,8 +470,8 @@ export type DeleteAllCompletedMutation = { __typename?: 'mutation_root', delete_
 
 
 export const GetTodosDocument = gql`
-    query GetTodos {
-  todo(order_by: {created_at: asc}) {
+    query GetTodos($userId: uuid!) {
+  todo(where: {user_id: {_eq: $userId}}, order_by: {created_at: asc}) {
     id
     name
     complete
@@ -473,8 +489,8 @@ export const GetTodoByIdDocument = gql`
 }
     `;
 export const CreateTodoDocument = gql`
-    mutation CreateTodo($name: String) {
-  insert_todo(objects: {name: $name}) {
+    mutation CreateTodo($name: String, $userId: uuid) {
+  insert_todo(objects: {name: $name, user_id: $userId}) {
     returning {
       id
       name
@@ -508,8 +524,8 @@ export const DeleteTodoDocument = gql`
 }
     `;
 export const DeleteAllCompletedDocument = gql`
-    mutation DeleteAllCompleted($deleteThem: Boolean) {
-  delete_todo(where: {complete: {_eq: $deleteThem}}) {
+    mutation DeleteAllCompleted($deleteThem: Boolean, $userId: uuid) {
+  delete_todo(where: {complete: {_eq: $deleteThem}, user_id: {_eq: $userId}}) {
     returning {
       complete
       created_at
@@ -527,7 +543,7 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 // export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
 //   return {
-//     GetTodos(variables?: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
+//     GetTodos(variables: GetTodosQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodosQuery> {
 //       return withWrapper((wrappedRequestHeaders) => client.request<GetTodosQuery>(GetTodosDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTodos', 'query');
 //     },
 //     GetTodoById(variables: GetTodoByIdQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetTodoByIdQuery> {

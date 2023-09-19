@@ -4,7 +4,6 @@ import {
   GetTodoByIdQuery,
   GetTodosDocument,
   GetTodosQuery,
-  Todo,
   UpdateTodoDocument,
   UpdateTodoMutation,
   DeleteTodoDocument,
@@ -14,8 +13,10 @@ import {
 } from "@/types/generated";
 import { CreateTodoDocument, CreateTodoMutation } from "@/types/generated";
 
-export async function getTodos() {
-  const result: GetTodosQuery = await gqlClient.request(GetTodosDocument);
+export async function getTodos(userId: string) {
+  const result: GetTodosQuery = await gqlClient.request(GetTodosDocument, {
+    userId,
+  });
   return result.todo;
 }
 
@@ -34,6 +35,7 @@ export async function recordNewTodo(newTodo: {
   id?: string;
   name: string;
   complete?: boolean;
+  userId: string
 }) {
   const result: CreateTodoMutation = await gqlClient.request(
     CreateTodoDocument,
@@ -70,14 +72,14 @@ export async function deleteTodo(id: string) {
   }
 }
 
-export async function deleteAllCompletedTodos(){
+export async function deleteAllCompletedTodos(userId: string) {
   try {
     const result: DeleteAllCompletedMutation = await gqlClient.request(
       DeleteAllCompletedDocument,
-      {deleteThem: true}
-    )
-    return result
+      { deleteThem: true, userId }
+    );
+    return result;
   } catch (error) {
-    throw new Error("Couldn't delete all completed todos")
+    throw new Error("Couldn't delete all completed todos");
   }
 }
